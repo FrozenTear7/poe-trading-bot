@@ -1,5 +1,11 @@
 # poe-trading-bot
 
+## About
+
+The bot is made purely for flipping currency, it sets buy and sell orders according to the provided setup. Although it is much slower than a normal player, it can work autonomously and bring a good couple of exalts from a day of trading.
+
+Keep in mind that it's not perfect, make sure to check on it from time to time if everything is still working. If you encounter any bugs, please notify me about it, preferably with a video proof, so I can replicate the problem.
+
 ## Requirements
 
 _Remember to create a [virtual environment](https://docs.python.org/3/library/venv.html) for the project_
@@ -18,6 +24,7 @@ Run the bot with `python main.py` from the root directory, kick back and enjoy t
 The bot purges the ignore list at the start, keep that in mind if you have some important criminals ignored already. Whenever the bot encounters a failed trade, it simply ignores the trader to simply let them know they do not have to spam messages asking what the hell is happening, please accept my trade.
 
 Remember to set all in game notifications to off - especially party invites and trades so that moving items can go smoothly without being interrupted by popups.
+The bot requires you to stay by your stash - correct coordinates are required in the `constants.py` setup.
 
 ## Stash state
 
