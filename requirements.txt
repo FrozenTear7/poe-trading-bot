@@ -1,0 +1,6 @@
+pyautogui
+Pillow
+opencv-python
+autopep8
+pyperclip
+requests
