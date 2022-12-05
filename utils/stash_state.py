@@ -28,7 +28,7 @@ def update_stash_state(buy_currency, buy_amount, sell_currency, sell_amount):
             stash_state[sell_currency]['amount'] = stash_state[sell_currency]['amount'] + sell_amount
 
         with open(config_file_name, 'w') as stash_state__file:
-            json.dump(stash_state, stash_state__file)
+            json.dump(stash_state, stash_state__file,sort_keys=True, indent=4)
     except FileNotFoundError:
         print('Please provide a valid stash_state file')
         exit(1)
@@ -42,7 +42,7 @@ def update_stash_amount(currency_name, amount):
         stash_state[currency_name]['amount'] = amount
 
         with open(config_file_name, 'w') as stash_state__file:
-            json.dump(stash_state, stash_state__file)
+            json.dump(stash_state, stash_state__file,sort_keys=True, indent=4) # prettier
     except FileNotFoundError:
         print('Please provide a valid stash_state file')
         exit(1)
@@ -59,7 +59,7 @@ def update_stash_prices(currency_name, sell_chaos, sell_self, buy_chaos, buy_sel
         stash_state[currency_name]['price']['buy']['self'] = buy_self
 
         with open(config_file_name, 'w') as stash_state__file:
-            json.dump(stash_state, stash_state__file)
+            json.dump(stash_state, stash_state__file,sort_keys=True, indent=4)
     except FileNotFoundError:
         print('Please provide a valid stash_state file')
         exit(1)
