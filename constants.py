@@ -1,8 +1,10 @@
 # Game setup
 LEAGUE_NAME = 'Standard'
 # LOG_FILE = 'C:/Program Files (x86)/Steam/steamapps/common/Path of Exile/logs/Client.txt'  # Steam default location
-LOG_FILE = 'C:/Program Files (x86)/Grinding Gear Games/Path of Exile/logs/Client.txt' # Standalone client default location
+LOG_FILE = 'C:/Program Files (x86)/Grinding Gear Games/Path of Exile/logs/Client.txt'  # Standalone client default location
 STASH_TABS = ['C', 'T1', 'T2', 'F']
+
+PYAUTOGUI_SPEED = 0.05
 
 # Regexes
 LOG_REGEX = '.+\[INFO Client \d+\] (: )?(.+)'
@@ -14,17 +16,20 @@ TRADE_CANCELLED_REGEX = 'Trade cancelled\.'
 AFK_REGEX = 'AFK mode is now ON\. Autoreply "This player is AFK\."'
 SELL_CURRENCY_FOR_CURRENCY_REGEX = f'@From (<.+> )?(.+): Hi, (I\'d|I would) like to buy your (\d+) (.+) for my (\d+) (.+) in {LEAGUE_NAME}'
 CLIPBOARD_CURRENCY_REGEX = '.+Rarity: \w+ - (.+) - -+ - Stack Size: (\d+).+'
+ALREADT_INVITED_REGEX = 'The Operation could not be completed because you are already in a party\.'
 
 # Other constants
 WAIT_RETRIES = 15
-WAIT_AGAIN_RETRIES = 30
+WAIT_AGAIN_RETRIES = 20
 
-HEIGHT = 5
+TRADE_VERIFY_RETRIES = 3
+
+# Trade Window/ Inventory Slots
 WIDTH = 12
-
-CONFIDENCE = 0.5
+HEIGHT = 5
 
 MOVETO_DURATION = 0.1
+CONFIDENCE = 0.5
 
 # Coordinates
 STASH_COORDINATES = (1080, 450)
@@ -36,14 +41,14 @@ TRADE_WINDOW_END_TOP = 476
 
 TRADE_WINDOW = {
     'start': {
-        'x': 311,
-        'y': 203
+        'x': 312,
+        'y': 204
     },
     'end': {
         'x': 942,
         'y': 466
     },
-    'cellSize': 53
+    'cellSize': 54
 }
 EQUIPMENT = {
     'start': {
@@ -99,6 +104,18 @@ SUB_TABS = {
 
 # Currency (Setup for currency tab)
 CURRENCY_TAB = {
+    'Chaos Orb': {
+        'altName': 'chaos',
+        'buyActive': False,  # DO NOT CHANGE THIS
+        'sellActive': False,  # DO NOT CHANGE THIS
+        'tabName': 'C',
+        'subTabName': 'General',
+        'sell': {
+            'x': 550,
+            'y': 270
+        },
+        'stackSize': 10
+    },
     # 1st row
     # 'Scroll of Wisdom': {
     #     'altName': 'wisdom',
@@ -118,7 +135,7 @@ CURRENCY_TAB = {
     #     'altName': 'chisel',
     #     'exchangeName': 'chisel',
     #     'buyActive': False,
-    #     'sellActive': True,
+    #     'sellActive': False,
     #     'buyLimit': 3000,
     #     'tabName': 'C',
     #     'subTabName': 'General',
@@ -127,8 +144,8 @@ CURRENCY_TAB = {
     #         'y': 152
     #     },
     #     'sell': {
-    #         'x': 460,
-    #         'y': 280
+    #         'x': 600,
+    #         'y': 200
     #     },
     #     'stackSize': 20
     # },
@@ -193,18 +210,6 @@ CURRENCY_TAB = {
     #     },
     #     'stackSize': 10
     # },
-    'Chaos Orb': {
-        'altName': 'chaos',
-        'buyActive': False,
-        'sellActive': False,
-        'tabName': 'C',
-        'subTabName': 'General',
-        'sell': {
-            'x': 550,
-            'y': 270
-        },
-        'stackSize': 10
-    },
     # # 3rd row
     # 'Exalted Shard': {
     #     'sell_url': 'https://www.pathofexile.com/trade/exchange/Archnemesis/nrmMT0',
@@ -229,7 +234,7 @@ CURRENCY_TAB = {
     'Divine Orb': {
         'sell_url': 'https://www.pathofexile.com/trade/exchange/Archnemesis/nrmMT0',
         'buy_url': 'https://www.pathofexile.com/trade/exchange/Archnemesis/4mjgu9',
-        'altName': 'divine', # What is altName?
+        'altName': 'divine',  # What is altName?
         'exchangeName': 'divine',
         'buyActive': True,
         'sellActive': True,

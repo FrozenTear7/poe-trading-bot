@@ -3,7 +3,7 @@ import pyperclip
 
 
 def invite_user(username):
-    pyautogui.sleep(3)
+    pyautogui.sleep(1)
     pyautogui.press('ENTER')
 
     pyautogui.typewrite('/invite ')
@@ -17,7 +17,7 @@ def invite_user(username):
 
 
 def ignore_player(username):
-    pyautogui.sleep(3)
+    pyautogui.sleep(1)
     pyautogui.press('ENTER')
 
     pyautogui.typewrite('/ignore ')
@@ -31,7 +31,7 @@ def ignore_player(username):
 
 
 def trade_user(username):
-    pyautogui.sleep(5)
+    pyautogui.sleep(3)
     pyautogui.press('ENTER')
 
     pyautogui.typewrite('/tradewith ')
@@ -79,7 +79,7 @@ def afk_off():
 
 
 def clear_ignore_list():
-    pyautogui.sleep(3)
+    pyautogui.sleep(1)
     pyautogui.press('ENTER')
     pyautogui.typewrite('/clear_ignore_list')
     pyautogui.press('ENTER')

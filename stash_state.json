@@ -1,6 +1,6 @@
 {
     "Cartographer's Chisel": {
-        "amount": 1314,
+        "amount": 1214,
         "price": {
             "buy": {
                 "chaos": 5,
@@ -8,22 +8,28 @@
             },
             "sell": {
                 "chaos": 10,
-                "self": 125
+                "self": 100
             }
         }
     },
     "Chaos Orb": {
-        "amount": 1395
+        "amount": 213123,
+        "price": {
+            "sell": {
+                "chaos": 500,
+                "self": 1
+            }
+        }
     },
     "Divine Orb": {
         "amount": 19,
         "price": {
             "buy": {
-                "chaos": 50,
+                "chaos": 10,
                 "self": 1
             },
             "sell": {
-                "chaos": 200,
+                "chaos": 165,
                 "self": 1
             }
         }
@@ -68,14 +74,14 @@
         }
     },
     "Exalted Orb": {
-        "amount": 0,
+        "amount": 1,
         "price": {
             "buy": {
                 "chaos": 15,
                 "self": 1
             },
             "sell": {
-                "chaos": 30,
+                "chaos": 100,
                 "self": 1
             }
         }

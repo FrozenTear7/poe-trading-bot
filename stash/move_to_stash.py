@@ -1,5 +1,6 @@
 import math
 import pyautogui
+import time
 from constants import CURRENCY_TAB, EQUIPMENT, HEIGHT, MOVETO_DURATION, WIDTH
 from stash.reset_tabs import reset_tabs
 from stash.set_price import set_price
@@ -16,6 +17,7 @@ def move_to_stash(name, amount):
     item_counter = 1
 
     click_stash()
+    time.sleep(1)  # For stash loading time
 
     for i in range(WIDTH):
         for j in range(HEIGHT):
