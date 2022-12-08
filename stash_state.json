@@ -13,7 +13,7 @@
         }
     },
     "Chaos Orb": {
-        "amount": 213123,
+        "amount": 1836,
         "price": {
             "sell": {
                 "chaos": 500,
@@ -22,14 +22,14 @@
         }
     },
     "Divine Orb": {
-        "amount": 19,
+        "amount": 13,
         "price": {
             "buy": {
-                "chaos": 10,
+                "chaos": 180,
                 "self": 1
             },
             "sell": {
-                "chaos": 165,
+                "chaos": 185,
                 "self": 1
             }
         }
@@ -74,14 +74,14 @@
         }
     },
     "Exalted Orb": {
-        "amount": 1,
+        "amount": 4,
         "price": {
             "buy": {
-                "chaos": 15,
+                "chaos": 24,
                 "self": 1
             },
             "sell": {
-                "chaos": 100,
+                "chaos": 26,
                 "self": 1
             }
         }

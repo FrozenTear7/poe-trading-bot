@@ -71,6 +71,12 @@ class LogListener():
                         config_file = open('stash_state.json', 'r')
                         stash_state = json.loads(config_file.read())
 
+                        # Check if trade exceed maximum slots
+                        if current_trade.sell_amount / CURRENCY_TAB[current_trade.sell_currency]['stackSize'] > 60 or \
+                                current_trade.buy_amount / CURRENCY_TAB[current_trade.buy_currency]['stackSize'] > 60:
+
+                            printtime("Exceeding Maximum Inventory Slots...")
+                            continue
                         # Check if messages get modified
                         if current_trade.sell_currency == "Chaos Orb":  # Buying other currency
                             target = stash_state[current_trade.buy_currency]
@@ -87,7 +93,7 @@ class LogListener():
                         elif current_trade.buy_currency == "Chaos Orb":  # Buying Chaos
                             target = (stash_state[current_trade.sell_currency])
                             if CURRENCY_TAB[current_trade.sell_currency]['sellActive']:  # Check if the currency buying is TRUE
-                                if target['price']['sell']['chaos'] == current_trade.buy_amount/current_trade.sell_amount:
+                                if current_trade.buy_amount/current_trade.sell_amount == target['price']['sell']['chaos']:
                                     pass
                                 else:
                                     printtime(f"MSG MODIFIED!!! Ignoring the Player...{current_trade.buyer}")
@@ -125,7 +131,7 @@ class LogListener():
                         self.log_file.readlines()
                         break
                 except Exception as e:
-                    printtime(f"Log Listener ERROR: {e}")
+                    printtime(f"Log Listener ERROR: {line}")
                     pass
 
                 pyautogui.sleep(1)

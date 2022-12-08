@@ -11,7 +11,6 @@ pyautogui.PAUSE = PYAUTOGUI_SPEED  # CAUTION!! Need more testing
 if __name__ == '__main__':
     printtime("Configuring Bot...")
     update_stash_state()
-    exit()
     clear_ignore_list()
     log_listener = LogListener()
     try:
