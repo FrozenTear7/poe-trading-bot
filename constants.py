@@ -5,6 +5,8 @@ LOG_FILE = 'C:/Program Files (x86)/Grinding Gear Games/Path of Exile/logs/Client
 STASH_TABS = ['C', 'T1', 'T2', 'F']
 
 PYAUTOGUI_SPEED = 0.05
+TAKE_ITEM_SPEED = 0.03
+
 
 # Regexes
 LOG_REGEX = '.+\[INFO Client \d+\] (: )?(.+)'
@@ -22,7 +24,7 @@ ALREADT_INVITED_REGEX = 'The Operation could not be completed because you are al
 WAIT_RETRIES = 15
 WAIT_AGAIN_RETRIES = 20
 
-TRADE_VERIFY_RETRIES = 3
+TRADE_VERIFY_RETRIES = 4
 
 # Trade Window/ Inventory Slots
 WIDTH = 12
@@ -38,6 +40,9 @@ TRADE_WINDOW_START_LEFT = 300
 TRADE_WINDOW_START_TOP = 193
 TRADE_WINDOW_END_LEFT = 954
 TRADE_WINDOW_END_TOP = 476
+
+PARTY_WINDOW_TAG_X=340
+PARTY_WINDOW_TAG_Y=180
 
 TRADE_WINDOW = {
     'start': {
