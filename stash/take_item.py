@@ -1,6 +1,6 @@
 import pyautogui
 import pyperclip
-from constants import CURRENCY_TAB, MOVETO_DURATION, STASH_TABS, SUB_TABS
+from constants import CURRENCY_TAB, MOVETO_DURATION, STASH_TABS, SUB_TABS, PYAUTOGUI_SPEED, TAKE_ITEM_SPEED
 from stash.place_item import place_item
 from utils.click_stash import click_stash
 from utils.stash_state import get_stash_state_currency
@@ -42,6 +42,9 @@ def take_currency(name, amount):
     # Original Logic
     else:
         while taken < amount:
+
+            pyautogui.PAUSE = TAKE_ITEM_SPEED
+
             if (amount - taken) >= currency_config['stackSize'] or (amount == stash_state['amount'] and amount - taken == 1):
                 pyautogui.moveTo(currency_config['sell']['x'], currency_config['sell']['y'], MOVETO_DURATION)
                 pyautogui.keyDown('CTRL')
@@ -66,5 +69,7 @@ def take_currency(name, amount):
                 taken += (amount - taken)
 
             slots_taken += 1
+
+        pyautogui.PAUSE = PYAUTOGUI_SPEED
 
     pyautogui.press('ESC')
