@@ -1,5 +1,6 @@
 import pyautogui
-from constants import CURRENCY_TAB, MOVETO_DURATION, STASH_TABS, SUB_TABS
+import pyperclip
+from constants import CURRENCY_TAB, MOVETO_DURATION, STASH_TABS, SUB_TABS, PYAUTOGUI_SPEED, TAKE_ITEM_SPEED
 from stash.place_item import place_item
 from utils.click_stash import click_stash
 from utils.stash_state import get_stash_state_currency
@@ -30,30 +31,45 @@ def take_currency(name, amount):
     reset_tabs()
     switch_tab(currency_config)
 
-    while taken < amount:
-        if (amount - taken) >= currency_config['stackSize'] or (amount == stash_state['amount'] and amount - taken == 1):
-            pyautogui.moveTo(currency_config['sell']['x'], currency_config['sell']['y'], MOVETO_DURATION)
-            pyautogui.keyDown('CTRL')
-            pyautogui.click()
-            pyautogui.keyUp('CTRL')
-
-            taken += currency_config['stackSize']
-        else:
-            # Open amount selection
-            pyautogui.moveTo(currency_config['sell']['x'], currency_config['sell']['y'], MOVETO_DURATION)
-            pyautogui.keyDown('SHIFT')
-            pyautogui.click()
-            pyautogui.keyUp('SHIFT')
-
-            # Move the slider
-            for _ in range(amount - taken - 1):
-                pyautogui.press('RIGHT')
-            pyautogui.press('ENTER')
-
-            place_item(slots_taken)
-
-            taken += (amount - taken)
-
+    # Extra Validation if target currency have only 1 left
+    if amount == 1 and stash_state['amount'] == 1:
+        pyautogui.moveTo(currency_config['sell']['x'], currency_config['sell']['y'], MOVETO_DURATION)
+        pyautogui.keyDown('CTRL')
+        pyautogui.click()
+        pyautogui.keyUp('CTRL')
         slots_taken += 1
+
+    # Original Logic
+    else:
+        while taken < amount:
+
+            pyautogui.PAUSE = TAKE_ITEM_SPEED
+
+            if (amount - taken) >= currency_config['stackSize'] or (amount == stash_state['amount'] and amount - taken == 1):
+                pyautogui.moveTo(currency_config['sell']['x'], currency_config['sell']['y'], MOVETO_DURATION)
+                pyautogui.keyDown('CTRL')
+                pyautogui.click()
+                pyautogui.keyUp('CTRL')
+
+                taken += currency_config['stackSize']
+            else:
+                # Open amount selection
+                pyautogui.moveTo(currency_config['sell']['x'], currency_config['sell']['y'], MOVETO_DURATION)
+                pyautogui.keyDown('SHIFT')
+                pyautogui.click()
+                pyautogui.keyUp('SHIFT')
+
+                # Move the slider
+                for _ in range(amount - taken - 1):
+                    pyautogui.press('RIGHT')
+                pyautogui.press('ENTER')
+
+                place_item(slots_taken)
+
+                taken += (amount - taken)
+
+            slots_taken += 1
+
+        pyautogui.PAUSE = PYAUTOGUI_SPEED
 
     pyautogui.press('ESC')

@@ -17,16 +17,17 @@ class LogStateMachine:
             if action == MESSAGE_RECEIVED:
                 self.trade_order = payload
                 invite_user(self.trade_order.buyer)
-                take_currency(self.trade_order.sell_currency, self.trade_order.sell_amount)
                 self.state = WAITING_FOR_PLAYER
         elif self.state == WAITING_FOR_PLAYER:
             if action == PLAYER_DID_NOT_JOIN:
                 kick_user(self.trade_order.buyer)
+                invite_user(self.trade_order.buyer)
             if action == PLAYER_DID_NOT_JOIN_RETRY:
                 ignore_player(self.trade_order.buyer)
-                move_to_stash(self.trade_order.sell_currency, self.trade_order.sell_amount)
+                kick_user(self.trade_order.buyer)
                 self.state = READY
             elif action == PLAYER_JOINED_AREA:
+                take_currency(self.trade_order.sell_currency, self.trade_order.sell_amount)
                 trade_currency_for_currency(self.trade_order)
                 self.state = IN_TRADE
         elif self.state == IN_TRADE:
