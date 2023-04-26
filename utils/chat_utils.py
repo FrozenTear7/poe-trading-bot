@@ -83,3 +83,9 @@ def clear_ignore_list():
     pyautogui.press('ENTER')
     pyautogui.typewrite('/clear_ignore_list')
     pyautogui.press('ENTER')
+
+
+def copy_text():
+    pyautogui.keyDown('CTRL')
+    pyautogui.press('C')
+    pyautogui.keyUp('CTRL')

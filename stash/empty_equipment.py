@@ -1,5 +1,5 @@
 import pyautogui
-from constants import EQUIPMENT, HEIGHT, WIDTH
+from constants import CELL_SIZE, EQUIPMENT, HEIGHT, WIDTH
 
 
 def empty_equipment(item_count=60):
@@ -8,8 +8,8 @@ def empty_equipment(item_count=60):
     pyautogui.keyDown('CTRL')
     for i in range(WIDTH):
         for j in range(HEIGHT):
-            pyautogui.moveTo(EQUIPMENT['start']['x'] + (i * EQUIPMENT['cellSize']),
-                             EQUIPMENT['start']['y'] + (j * EQUIPMENT['cellSize']))
+            pyautogui.moveTo(EQUIPMENT['start']['x'] + (i * EQUIPMENT[CELL_SIZE]),
+                             EQUIPMENT['start']['y'] + (j * EQUIPMENT[CELL_SIZE]))
             pyautogui.click()
 
             item_counter += 1

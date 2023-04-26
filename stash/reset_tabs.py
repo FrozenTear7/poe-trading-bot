@@ -1,8 +1,8 @@
 import pyautogui
 
+from constants import AMOUNT_OF_STASH_TABS
+
 
 def reset_tabs():
-    pyautogui.keyDown('CTRL')
-    for _ in range(15):
-        pyautogui.hotkey('CTRL', 'LEFT')
-    pyautogui.keyUp('CTRL')
+    for _ in range(AMOUNT_OF_STASH_TABS):
+        pyautogui.press('LEFT')

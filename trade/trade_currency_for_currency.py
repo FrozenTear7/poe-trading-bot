@@ -1,11 +1,9 @@
 import pyautogui
 import math
-from constants import CURRENCY_TAB, WIDTH, HEIGHT, TRADE_WINDOW, PYAUTOGUI_SPEED, TRADE_VERIFY_RETRIES
+from constants import CELL_SIZE, CURRENCY_TAB, WIDTH, HEIGHT, TRADE_WINDOW, PYAUTOGUI_SPEED, TRADE_VERIFY_RETRIES
 from stash.empty_equipment import empty_equipment
 from trade.TradeException import TradeException
 from trade.accept_trade import accept_trade
-from trade.get_cell_info import get_cell_info_currency
-from trade.move_cursor_to_cell import move_cursor_to_cell
 from trade.trade_waits import wait_for_window
 from utils.chat_utils import trade_user
 from utils.resetCursor import reset_cursor
@@ -50,8 +48,8 @@ def trade_currency_for_currency(trade_order, n=0):
                         if pyautogui.locate('images/acceptTradeItems.png', pyautogui.screenshot(region=(486, 824, 282, 25))):
                             for col in range(WIDTH):
                                 for row in range(HEIGHT):
-                                    pyautogui.moveTo(TRADE_WINDOW['start']['x']+col*TRADE_WINDOW['cellSize'],
-                                                     TRADE_WINDOW['start']['y']+row*TRADE_WINDOW['cellSize'])
+                                    pyautogui.moveTo(TRADE_WINDOW['start']['x']+col*TRADE_WINDOW[CELL_SIZE],
+                                                     TRADE_WINDOW['start']['y']+row*TRADE_WINDOW[CELL_SIZE])
                             VERIFY_ITEM = True
                         elif not pyautogui.locate('images/acceptTradeItems.png', pyautogui.screenshot(region=(486, 824, 282, 25))):
                             BROWSE_ITEM = False
@@ -60,13 +58,14 @@ def trade_currency_for_currency(trade_order, n=0):
                         for col in range(WIDTH):
                             for row in range(HEIGHT):
                                 try:
-                                    pyautogui.moveTo(TRADE_WINDOW['start']['x']+col*TRADE_WINDOW['cellSize'],
-                                                     TRADE_WINDOW['start']['y']+row*TRADE_WINDOW['cellSize'])
+                                    pyautogui.moveTo(TRADE_WINDOW['start']['x']+col*TRADE_WINDOW[CELL_SIZE],
+                                                     TRADE_WINDOW['start']['y']+row*TRADE_WINDOW[CELL_SIZE])
                                     pyautogui.keyDown('CTRL')
                                     pyautogui.press('C')
                                     pyautogui.keyUp('CTRL')
                                     clipboard_data = pyperclip.paste().replace('\r', '').replace('\n', ' - ')
-                                    currency_data = re.match('.+Rarity: \w+ - (.+) - -+ - Stack Size: (\d+).+', clipboard_data)
+                                    currency_data = re.match(
+                                        '.+Rarity: \w+ - (.+) - -+ - Stack Size: (\d+).+', clipboard_data)
                                     cell_currency = currency_data.group(1)
                                     cell_amount = int(currency_data.group(2))
                                     pyperclip.copy('')
@@ -76,7 +75,6 @@ def trade_currency_for_currency(trade_order, n=0):
 
                                     if total_amount == trade_order.buy_amount:
                                         break
-                                # Catching: Empty Slot Have no .group()
                                 except Exception as e:
                                     pass
 

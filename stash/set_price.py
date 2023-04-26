@@ -1,35 +1,28 @@
 import pyautogui
+from constants import STASH_TAB_PRICING_MENU_THRESHOLD, STASH_TAB_PRICING_MENU_SELECT_ABOVE_THRESHOLD, STASH_TAB_PRICING_MENU_SELECT_UNDER_THRESHOLD
+
+from utils.prefix_print import printtime
+from utils.translate_coordinates import translate_coordinates_horizontal, translate_coordinates_vertical
 
 
-def clear_current_price():
-    x, y = pyautogui.position()
-    if x > 160:
-        pyautogui.moveRel(-90, 84)
+def set_price(price):
+    printtime(f'Setting price: {price}')
+    pyautogui.click(button='right')
+
+    x, _ = pyautogui.position()
+    if x > translate_coordinates_horizontal(STASH_TAB_PRICING_MENU_THRESHOLD):
+        pyautogui.moveRel(translate_coordinates_horizontal(STASH_TAB_PRICING_MENU_SELECT_ABOVE_THRESHOLD[0]),
+                          translate_coordinates_vertical(STASH_TAB_PRICING_MENU_SELECT_ABOVE_THRESHOLD[1]))
     else:
-        pyautogui.moveRel(0, 84)
+        pyautogui.moveRel(translate_coordinates_horizontal(STASH_TAB_PRICING_MENU_SELECT_UNDER_THRESHOLD[0]),
+                          translate_coordinates_vertical(STASH_TAB_PRICING_MENU_SELECT_UNDER_THRESHOLD[1]))
     pyautogui.click()
+
+    # Select the note option
     pyautogui.press('UP')
     pyautogui.press('UP')
     pyautogui.press('ENTER')
-    pyautogui.moveRel(260, 0)
-    pyautogui.click()
+
     pyautogui.hotkey('CTRL', 'A')
-    pyautogui.press('BACKSPACE')
-
-
-def set_price(stash_state, price_already_set=False):
-    pyautogui.click(button='right')
-    if price_already_set:
-        clear_current_price()
-    pyautogui.typewrite(
-        f'~price {stash_state["price"]["sell"]["chaos"]}/{stash_state["price"]["sell"]["self"]} chaos')
-    pyautogui.press('ENTER')
-
-
-def set_chaos_price(stash_state, name, price_already_set=False):
-    pyautogui.click(button='right')
-    if price_already_set:
-        clear_current_price()
-    pyautogui.typewrite(
-        f'~price {stash_state["price"]["buy"]["self"]}/{stash_state["price"]["buy"]["chaos"]} {name}')
+    pyautogui.typewrite(price)
     pyautogui.press('ENTER')

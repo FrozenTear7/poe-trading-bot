@@ -1,6 +1,7 @@
-from constants import TRADE_WINDOW_END_LEFT, TRADE_WINDOW_END_TOP, TRADE_WINDOW_START_LEFT, TRADE_WINDOW_START_TOP
+from constants import TRADE_WINDOW
+from utils.translate_coordinates import translate_coordinates_horizontal, translate_coordinates_vertical
 
 
 def item_within_window(x, y, width, height):
-    return x >= TRADE_WINDOW_START_LEFT and x + width <= TRADE_WINDOW_END_LEFT \
-        and y >= TRADE_WINDOW_START_TOP and y + height <= TRADE_WINDOW_END_TOP
+    return x >= translate_coordinates_horizontal(TRADE_WINDOW[0]) and x + width <= translate_coordinates_horizontal(TRADE_WINDOW[2]) \
+        and y >= translate_coordinates_vertical(TRADE_WINDOW[1]) and y + height <= translate_coordinates_vertical(TRADE_WINDOW[3])

@@ -5,7 +5,6 @@ from listener.LogStateMachine import LogStateMachine
 from listener.log_listener_events import CURRENCY_FOR_CURRENCY, MESSAGE_RECEIVED, PLAYER_DID_NOT_JOIN, PLAYER_DID_NOT_JOIN_RETRY, PLAYER_JOINED_AREA, TRADE_ACCEPTED, TRADE_CANCELLED
 from listener.log_states import WAITING_FOR_PLAYER
 from trade.TradeOrder import TradeOrder
-from utils.alt_name_fix import alt_name_fix
 from utils.chat_utils import afk_off, ignore_player
 from utils.check_correct_whisper import check_correct_whisper
 from utils.party_status import party_status
@@ -61,12 +60,12 @@ class LogListener():
                     elif re.match(INCOMING_PLAYER_WHISPER_REGEX, log):
                         printtime(re.match(SELL_CURRENCY_FOR_CURRENCY_REGEX, log).group(0))
                         sell_currency_for_currency_whisper = re.match(SELL_CURRENCY_FOR_CURRENCY_REGEX, log)
-                        current_trade = TradeOrder(CURRENCY_FOR_CURRENCY,                                      # type
-                                                   sell_currency_for_currency_whisper.group(2),                # buyer
-                                                   alt_name_fix(sell_currency_for_currency_whisper.group(5)),  # sell_currency
-                                                   sell_currency_for_currency_whisper.group(4),                # sell_amount
-                                                   alt_name_fix(sell_currency_for_currency_whisper.group(7)),  # buy_currency
-                                                   sell_currency_for_currency_whisper.group(6)                 # buy_amount
+                        current_trade = TradeOrder(CURRENCY_FOR_CURRENCY,
+                                                   sell_currency_for_currency_whisper.group(2),
+                                                   sell_currency_for_currency_whisper.group(5),
+                                                   sell_currency_for_currency_whisper.group(4),
+                                                   sell_currency_for_currency_whisper.group(7),
+                                                   sell_currency_for_currency_whisper.group(6)
                                                    )
                         config_file = open('stash_state.json', 'r')
                         stash_state = json.loads(config_file.read())
@@ -113,8 +112,8 @@ class LogListener():
                         else:
                             self.log_state_machine.on_event(MESSAGE_RECEIVED, current_trade)
                             printtime(f"Sent Invitation to '{current_trade.buyer}'...")
-                        # if check_correct_whisper(current_trade):
-                        #     self.log_state_machine.on_event(MESSAGE_RECEIVED, current_trade)
+                        if check_correct_whisper(current_trade):
+                            self.log_state_machine.on_event(MESSAGE_RECEIVED, current_trade)
                     elif re.match(PLAYER_JOINED_AREA_REGEX, log):
                         printtime(re.match(PLAYER_JOINED_AREA_REGEX, log).group(0))
                         reply_waits = 0

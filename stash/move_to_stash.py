@@ -1,7 +1,7 @@
 import math
 import pyautogui
 import time
-from constants import CURRENCY_TAB, EQUIPMENT, HEIGHT, MOVETO_DURATION, WIDTH
+from constants import CELL_SIZE, CURRENCY_TAB, EQUIPMENT, HEIGHT, MOVETO_DURATION, WIDTH
 from stash.reset_tabs import reset_tabs
 from stash.set_price import set_price
 from utils.click_stash import click_stash
@@ -21,8 +21,8 @@ def move_to_stash(name, amount):
 
     for i in range(WIDTH):
         for j in range(HEIGHT):
-            pyautogui.moveTo(EQUIPMENT['start']['x'] + (i * EQUIPMENT['cellSize']),
-                             EQUIPMENT['start']['y'] + (j * EQUIPMENT['cellSize']), MOVETO_DURATION)
+            pyautogui.moveTo(EQUIPMENT['start']['x'] + (i * EQUIPMENT[CELL_SIZE]),
+                             EQUIPMENT['start']['y'] + (j * EQUIPMENT[CELL_SIZE]), MOVETO_DURATION)
             pyautogui.keyDown('CTRL')
             pyautogui.click()
             pyautogui.keyUp('CTRL')

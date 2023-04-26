@@ -3,78 +3,93 @@ import pyperclip
 import re
 from constants import CLIPBOARD_CURRENCY_REGEX, CURRENCY_TAB, MOVETO_DURATION, STASH_TABS, SUB_TABS
 from stash.reset_tabs import reset_tabs
-from stash.set_price import set_chaos_price, set_price
+from stash.scroll_tabs import scroll_tabs
+from stash.set_price import set_price
+from utils.chat_utils import copy_text
 from utils.click_stash import click_stash
-from utils.stash_state import get_stash_state_currency, update_stash_amount
+from utils.prefix_print import printtime
+from utils.stash_state import update_stash_amount
+from utils.translate_coordinates import translate_coordinates_horizontal, translate_coordinates_vertical
 
 
-def set_sell_price(current_currency_name, currency_config, stash_state_currency):
+def update_sell_price(currency_name, currency_config, price_calculator):
+    printtime(f'Resetting tabs')
     reset_tabs()
-    if currency_config['sellActive']:
-        if currency_config['tabName']:
-            for _ in range(STASH_TABS.index(currency_config['tabName'])):
-                pyautogui.hotkey('CTRL', 'RIGHT')
 
-        sub_tab_coordinates = SUB_TABS[currency_config['tabName']][currency_config['subTabName']]
+    printtime(f'Scrolling to sell tab: {currency_config["sell"]["tabName"]}')
+    scroll_tabs(STASH_TABS.index(currency_config['sell']['tabName']))
 
-        pyautogui.moveTo(sub_tab_coordinates['x'], sub_tab_coordinates['y'], MOVETO_DURATION)
+    if currency_config['sell']['subTabName']:
+        sub_tab_coordinates = SUB_TABS[currency_config['sell']['tabName']][currency_config['sell']['subTabName']]
+        sub_tab_button_coords = (translate_coordinates_horizontal(
+            sub_tab_coordinates['x']), translate_coordinates_vertical(sub_tab_coordinates['y']))
+
+        printtime(f'Moving cursor to subTab: ({sub_tab_button_coords[0]}, {sub_tab_button_coords[1]})')
+        pyautogui.moveTo(sub_tab_button_coords[0], sub_tab_button_coords[1], MOVETO_DURATION)
         pyautogui.click()
-        pyautogui.moveTo(currency_config['sell']['x'],
-                         currency_config['sell']['y'])
 
-        pyautogui.keyDown('CTRL')
-        pyautogui.press('C')
-        pyautogui.keyUp('CTRL')
+    tab_location_coords = (translate_coordinates_horizontal(currency_config['sell']['x']), translate_coordinates_vertical(
+        currency_config['sell']['y']))
 
-        clipboard_data = pyperclip.paste().replace('\r', '').replace('\n', ' - ').replace(',', '')
+    printtime(f'Moving cursor to currency position: ({tab_location_coords[0]}, {tab_location_coords[1]})')
+    pyautogui.moveTo(tab_location_coords[0], tab_location_coords[1], MOVETO_DURATION)
 
-        if clipboard_data == '':
-            update_stash_amount(current_currency_name, 0)
-        else:
-            currency_data = re.match(CLIPBOARD_CURRENCY_REGEX, clipboard_data)
-            price_already_set = 'Note: ~price' in clipboard_data
+    copy_text()
 
-            currency_amount = int(currency_data.group(2))
+    pyperclip.copy('')
+    clipboard_data = pyperclip.paste().replace('\r', '').replace('\n', ' - ').replace(',', '')
 
-            update_stash_amount(current_currency_name, currency_amount)
-            set_price(stash_state_currency, price_already_set)
-
-    # Exception for Chaos Orb, duplicated lines due to laziness Kapp
-    if current_currency_name == "Chaos Orb":
-        sub_tab_coordinates = SUB_TABS[currency_config['tabName']][currency_config['subTabName']]
-        pyautogui.moveTo(sub_tab_coordinates['x'], sub_tab_coordinates['y'], MOVETO_DURATION)
-        pyautogui.click()
-        pyautogui.moveTo(currency_config['sell']['x'],
-                         currency_config['sell']['y'])
-        pyautogui.keyDown('CTRL')
-        pyautogui.press('C')
-        pyautogui.keyUp('CTRL')
-        clipboard_data = pyperclip.paste().replace('\r', '').replace('\n', ' - ').replace(',', '')
+    if clipboard_data == '':
+        printtime(f'Currency missing from the stash, setting stash amount to: 0')
+        update_stash_amount(currency_name, 0)
+    else:
         currency_data = re.match(CLIPBOARD_CURRENCY_REGEX, clipboard_data)
-        price_already_set = 'Note: ~price' in clipboard_data
         currency_amount = int(currency_data.group(2))
-        update_stash_amount(current_currency_name, currency_amount)
+
+        printtime(f'Setting stash amount of currency to: {currency_amount}')
+        update_stash_amount(currency_name, currency_amount)
+
+        # The only currency we don't have to price is chaos orb
+        if currency_config['sell']['active']:
+            set_price(price_calculator.get_sell_price(currency_name))
 
 
-def set_buy_price(current_currency_name, stash_state_currency):
-    reset_tabs()
-    pyautogui.hotkey('CTRL', 'RIGHT')
-    if CURRENCY_TAB[current_currency_name]['buyActive']:
-        pyautogui.moveTo(CURRENCY_TAB[current_currency_name]['buy']['x'],
-                         CURRENCY_TAB[current_currency_name]['buy']['y'])
-        set_chaos_price(stash_state_currency, CURRENCY_TAB[current_currency_name]['exchangeName'], True)
+def update_buy_price(currency_name, currency_config, price_calculator):
+    if currency_config['buy']['active']:
+        printtime(f'Resetting tabs')
+        reset_tabs()
+
+        printtime(f'Scrolling to buy tab: {currency_config["buy"]["tabName"]}')
+        scroll_tabs(STASH_TABS.index(currency_config['buy']['tabName']))
+
+        tab_location_coords = (currency_config['buy']['x'], currency_config['buy']['y'])
+
+        printtime(f'Moving cursor to currency position: ({tab_location_coords[0]}, {tab_location_coords[1]})')
+        pyautogui.moveTo(tab_location_coords[0], tab_location_coords[1])
+
+        set_price(price_calculator.get_buy_price(currency_name, currency_config['exchangeName']))
+    else:
+        printtime(f'Buying is inactive for this currency')
 
 
-def update_stash_state():
+def update_stash_state(price_calculator):
     pyautogui.sleep(3)
+    printtime('Opening the stash')
     click_stash()
 
-    for current_currency_name in list(CURRENCY_TAB):
-        currency_config = CURRENCY_TAB[current_currency_name]
+    # For each item the currency tab setup
+    for currency_name in list(CURRENCY_TAB):
+        currency_config = CURRENCY_TAB[currency_name]
         pyperclip.copy('')
-        stash_state_currency = get_stash_state_currency(current_currency_name)
 
-        set_sell_price(current_currency_name, currency_config, stash_state_currency)
-        set_buy_price(current_currency_name, stash_state_currency)
+        printtime(f'Fetching stash state for: {currency_name}')
+
+        printtime(f'Setting sell price for currency: {currency_name}')
+        update_sell_price(currency_name, currency_config, price_calculator)
+        printtime(f'Finished setting sell price for: {currency_name}')
+
+        printtime(f'Setting buy price for currency: {currency_name}')
+        update_buy_price(currency_name, currency_config, price_calculator)
+        printtime(f'Finished setting buy price for: {currency_name}')
 
     pyautogui.press('ESC')
