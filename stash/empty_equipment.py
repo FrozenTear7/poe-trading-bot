@@ -5,6 +5,7 @@ from constants import CELL_SIZE, EQUIPMENT, HEIGHT, WIDTH
 def empty_equipment(item_count=60):
     item_counter = 1
 
+    # FIXME: CTRL PRESS MOUSE AND HOLD
     pyautogui.keyDown('CTRL')
     for i in range(WIDTH):
         for j in range(HEIGHT):

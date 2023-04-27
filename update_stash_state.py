@@ -34,9 +34,8 @@ def update_sell_price(currency_name, currency_config, price_calculator):
     printtime(f'Moving cursor to currency position: ({tab_location_coords[0]}, {tab_location_coords[1]})')
     pyautogui.moveTo(tab_location_coords[0], tab_location_coords[1], MOVETO_DURATION)
 
-    copy_text()
-
     pyperclip.copy('')
+    copy_text()
     clipboard_data = pyperclip.paste().replace('\r', '').replace('\n', ' - ').replace(',', '')
 
     if clipboard_data == '':

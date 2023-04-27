@@ -11,13 +11,9 @@ def get_stash_state():
 
 
 def get_stash_state_currency(currency):
-    try:
-        config_file = open(config_file_name, 'r')
-        stash_state = json.loads(config_file.read())
-        return stash_state[currency]
-    except FileNotFoundError:
-        print('Please provide a valid stash_state file')
-        exit(1)
+    config_file = open(config_file_name, 'r')
+    stash_state = json.loads(config_file.read())
+    return stash_state[currency]
 
 
 def update_stash_state(buy_currency, buy_amount, sell_currency, sell_amount):

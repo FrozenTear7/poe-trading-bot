@@ -1,6 +1,8 @@
 import pyautogui
 import pyperclip
 
+from constants import MY_USERNAME
+
 
 def invite_user(username):
     pyautogui.sleep(1)
@@ -59,12 +61,12 @@ def thank_user(username):
     pyautogui.press('ENTER')
 
 
-def kick_user(username):
+def leave_party():
     pyautogui.press('ENTER')
 
     pyautogui.typewrite('/kick ')
 
-    pyperclip.copy(username)
+    pyperclip.copy(MY_USERNAME)
     pyautogui.keyDown('CTRL')
     pyautogui.press('V')
     pyautogui.keyUp('CTRL')

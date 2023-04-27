@@ -15,12 +15,20 @@ class PriceCalculator():
 
     def get_sell_price(self, currency_name):
         currency_config = self.get_currency_config(currency_name)
-        sell_price = ceil(currency_config['receive']['value'] * 10000) / 10000.0
+        sell_price = round(currency_config['receive']['value'], 2)
 
         return f'~price {sell_price} chaos'
 
+    def verify_sell_price(self, offered_price, currency_name):
+        currency_config = self.get_currency_config(currency_name)
+        return round(currency_config['receive']['value'], 2) == round(offered_price, 2)
+
     def get_buy_price(self, currency_name, exchangeName):
         currency_config = self.get_currency_config(currency_name)
-        sell_price = floor(currency_config['pay']['value'] * 10000) / 10000.0
+        sell_price = round(currency_config['pay']['value'], 2)
 
         return f'~price {sell_price} {exchangeName}'
+
+    def verify_buy_price(self, offered_price, currency_name):
+        currency_config = self.get_currency_config(currency_name)
+        return round(currency_config['pay']['value'], 2) == round(offered_price, 2)

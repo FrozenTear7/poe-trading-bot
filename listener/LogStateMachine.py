@@ -5,7 +5,7 @@ from stash.take_item import take_currency
 from trade.TradeOrder import TradeOrder
 from trade.trade_accepted import trade_accepted
 from trade.trade_currency_for_currency import trade_currency_for_currency
-from utils.chat_utils import ignore_player, invite_user, kick_user
+from utils.chat_utils import ignore_player, invite_user, leave_party
 
 
 class LogStateMachine:
@@ -20,11 +20,9 @@ class LogStateMachine:
                 self.state = WAITING_FOR_PLAYER
         elif self.state == WAITING_FOR_PLAYER:
             if action == PLAYER_DID_NOT_JOIN:
-                kick_user(self.trade_order.buyer)
-                invite_user(self.trade_order.buyer)
+                leave_party()
             if action == PLAYER_DID_NOT_JOIN_RETRY:
                 ignore_player(self.trade_order.buyer)
-                kick_user(self.trade_order.buyer)
                 self.state = READY
             elif action == PLAYER_JOINED_AREA:
                 take_currency(self.trade_order.sell_currency, self.trade_order.sell_amount)
@@ -35,7 +33,7 @@ class LogStateMachine:
                 trade_accepted(self.trade_order)
                 self.state = READY
             elif action == TRADE_CANCELLED:
-                kick_user(self.trade_order.buyer)
+                leave_party()
                 move_to_stash(self.trade_order.sell_currency, self.trade_order.sell_amount)
                 ignore_player(self.trade_order.buyer)
                 self.state = READY

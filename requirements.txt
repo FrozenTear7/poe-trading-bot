@@ -4,3 +4,4 @@ opencv-python
 autopep8
 pyperclip
 requests
+pytesseract

@@ -5,26 +5,30 @@ from utils.chat_utils import clear_ignore_list
 from utils.prefix_print import printtime
 from constants import PYAUTOGUI_SPEED
 import pyautogui
+import pytesseract
 
-pyautogui.PAUSE = PYAUTOGUI_SPEED  # CAUTION!! Need more testing
+from utils.translate_coordinates import translate_coordinates_horizontal, translate_coordinates_vertical
 
-# Make sure to browse over the tabs before starting the bot, or the timer would be off.
+pyautogui.PAUSE = PYAUTOGUI_SPEED
+
 if __name__ == '__main__':
-    printtime('Configuring Bot...')
+    pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract'
+
+    printtime('Configuring the bot')
 
     printtime('Setting up the price calculator')
     price_calculator = PriceCalculator()
 
     printtime('Updating the stash state')
-    update_stash_state(price_calculator)
+    # update_stash_state(price_calculator)
     printtime('Finished updating the stash state')
 
     printtime('Clearing the ignore list')
     clear_ignore_list()
 
-    # log_listener = LogListener()
-    # try:
-    #     printtime("Listening Log...")
-    #     log_listener.listen()
-    # except KeyboardInterrupt:
-    #     printtime("Stopping the bot...")
+    log_listener = LogListener(price_calculator)
+    try:
+        printtime("Listening to incoming trade offers")
+        log_listener.listen()
+    except KeyboardInterrupt:
+        printtime("Stopping the bot")
